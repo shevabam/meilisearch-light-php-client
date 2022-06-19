@@ -14,7 +14,8 @@
         "issues": "https://github.com/shevabam/meilisearch-light-php-client/issues",
         "source": "https://github.com/shevabam/meilisearch-light-php-client/tree/master"
     },
-    "version": "1.0.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "MeilisearchLighClient\\": "src/"
