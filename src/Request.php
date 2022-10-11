@@ -105,7 +105,7 @@ class Request
 
         $opts[CURLOPT_HTTPHEADER] = $headers;
 
-        if ($this->httpMethod == 'POST')
+        if ($this->httpMethod == 'POST' || $this->httpMethod == 'PATCH')
         {
             // If it is a file that is transmitted (starts with @)
             if (!is_array($this->datas) && strpos($this->datas, '@') === 0)
