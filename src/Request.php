@@ -105,7 +105,7 @@ class Request
 
         $opts[CURLOPT_HTTPHEADER] = $headers;
 
-        if ($this->httpMethod == 'POST' || $this->httpMethod == 'PATCH')
+        if ($this->httpMethod == 'POST' || $this->httpMethod == 'PATCH' || $this->httpMethod == 'PUT')
         {
             // If it is a file that is transmitted (starts with @)
             if (!is_array($this->datas) && strpos($this->datas, '@') === 0)
@@ -120,24 +120,32 @@ class Request
                     $postData = $this->datas;
             }
             
-            $opts[CURLOPT_POST] = true;
             $opts[CURLOPT_POSTFIELDS] = $postData;
+        }
+
+        if ($this->httpMethod == 'POST')
+        {
+            $opts[CURLOPT_POST] = true;
+        }
+        elseif ($this->httpMethod == 'PUT')
+        {
+            $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
         }
 
         curl_setopt_array($ch, $opts);
 
         $response = curl_exec($ch);
 
-        if (!curl_exec($ch))
+        $this->httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if (!$response && curl_errno($ch) > 0)
         {
             throw new \Exception('cURL error: "'.curl_error($ch).'" - Code: '. curl_errno($ch));
         }
 
-        $this->httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
         curl_close($ch);
 
-        $this->isOk();
+        // $this->isOk();
          
         return $response;
     }
